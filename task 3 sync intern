@@ -1,0 +1,83 @@
+//html code
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Quiz App</title>
+</head>
+<body>
+	<div id="quiz-container">
+		<h1 id="question"></h1>
+		<ul id="options">
+			<li><button id="btn0"></button></li>
+			<li><button id="btn1"></button></li>
+			<li><button id="btn2"></button></li>
+			<li><button id="btn3"></button></li>
+		</ul>
+	</div>
+
+	<script src="app.js"></script>
+</body>
+</html>
+
+//javascript code
+// Define the quiz questions and options in an array
+const quizData = [
+    {
+        question: "What is the capital city of France?",
+        options: ["Berlin", "Paris", "Madrid", "Rome"],
+        answer: 1
+    },
+    {
+        question: "Which country won the 2018 FIFA World Cup?",
+        options: ["Brazil", "France", "Spain", "Argentina"],
+        answer: 1
+    },
+    {
+        question: "What is the largest ocean in the world?",
+        options: ["Atlantic", "Indian", "Pacific", "Arctic"],
+        answer: 2
+    }
+];
+
+// Get elements from the HTML
+const questionElement = document.getElementById("question");
+const optionsElement = document.getElementById("options");
+const optionButtons = document.querySelectorAll("#options button");
+
+let currentQuestion = 0;
+let score = 0;
+
+// Function to load the next question
+function loadQuestion() {
+    const currentQuizData = quizData[currentQuestion];
+    questionElement.innerHTML = currentQuizData.question;
+    for (let i = 0; i < optionButtons.length; i++) {
+        optionButtons[i].innerHTML = currentQuizData.options[i];
+        optionButtons[i].addEventListener("click", checkAnswer);
+    }
+}
+
+// Function to check the selected answer
+function checkAnswer(event) {
+    const selectedOption = event.target;
+    const selectedAnswer = selectedOption.innerHTML;
+    const currentQuizData = quizData[currentQuestion];
+    if (selectedAnswer === currentQuizData.options[currentQuizData.answer]) {
+        score++;
+    }
+    currentQuestion++;
+    if (currentQuestion < quizData.length) {
+        loadQuestion();
+    } else {
+        endQuiz();
+    }
+}
+
+// Function to end the quiz and show the final score
+function endQuiz() {
+    optionsElement.style.display = "none";
+    questionElement.innerHTML = `You scored ${score} out of ${quizData.length}!`;
+}
+
+// Load the first question
+loadQuestion();
